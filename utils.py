@@ -8,6 +8,49 @@ from torch.utils.data import Dataset
 from torchvision import datasets, transforms
 from scipy.ndimage.interpolation import rotate as scipyrotate
 from networks import MLP, ConvNet, LeNet, AlexNet, AlexNetBN, VGG11, VGG11BN, ResNet18, ResNet18BN_AP, ResNet18BN
+import re
+
+def extract_number(filepath):
+    filename = os.path.basename(filepath)
+    match = re.search(r'\d+',filename)
+    return int(match.group()) if match else None
+
+def sort_filenames_by_number(filepaths):
+    return sorted(filepaths,key=extract_number)
+
+
+def getStatistics(data_path):
+    tensors = []
+    for filename in os.listdir(data_path):
+        img_path = os.path.join(data_path, filename)
+        img = np.load(img_path)
+        img = torch.from_numpy(img)
+        
+        tensors.append(img)
+    mean, std = calculate_mean_std(tensors)
+    return mean, std
+
+
+def calculate_mean_std(tensors):
+    mean = torch.zeros(3)
+    std = torch.zeros(3)
+    num_pixels = 0
+
+    for tensor in tensors:
+        # Assuming the tensor shape is (C, H, W) with 3 channels
+        channels, height, width = tensor.shape
+        num_pixels += height * width
+        for channel in range(channels):
+            mean[channel] += torch.sum(tensor[channel])
+            std[channel] += torch.sum(tensor[channel] ** 2)
+
+    mean /= num_pixels
+    std /= num_pixels
+    std = torch.sqrt(std - mean ** 2)
+
+    return mean, std
+    
+
 
 def get_dataset(dataset, data_path):
     if dataset == 'MNIST':
@@ -20,6 +63,7 @@ def get_dataset(dataset, data_path):
         dst_train = datasets.MNIST(data_path, train=True, download=True, transform=transform) # no augmentation
         dst_test = datasets.MNIST(data_path, train=False, download=True, transform=transform)
         class_names = [str(c) for c in range(num_classes)]
+        testloader = torch.utils.data.DataLoader(dst_test, batch_size=256, shuffle=False, num_workers=0)
 
     elif dataset == 'FashionMNIST':
         channel = 1
@@ -31,6 +75,7 @@ def get_dataset(dataset, data_path):
         dst_train = datasets.FashionMNIST(data_path, train=True, download=True, transform=transform) # no augmentation
         dst_test = datasets.FashionMNIST(data_path, train=False, download=True, transform=transform)
         class_names = dst_train.classes
+        testloader = torch.utils.data.DataLoader(dst_test, batch_size=256, shuffle=False, num_workers=0)
 
     elif dataset == 'SVHN':
         channel = 3
@@ -42,6 +87,7 @@ def get_dataset(dataset, data_path):
         dst_train = datasets.SVHN(data_path, split='train', download=True, transform=transform)  # no augmentation
         dst_test = datasets.SVHN(data_path, split='test', download=True, transform=transform)
         class_names = [str(c) for c in range(num_classes)]
+        testloader = torch.utils.data.DataLoader(dst_test, batch_size=256, shuffle=False, num_workers=0)
 
     elif dataset == 'CIFAR10':
         channel = 3
@@ -53,6 +99,7 @@ def get_dataset(dataset, data_path):
         dst_train = datasets.CIFAR10(data_path, train=True, download=True, transform=transform) # no augmentation
         dst_test = datasets.CIFAR10(data_path, train=False, download=True, transform=transform)
         class_names = dst_train.classes
+        testloader = torch.utils.data.DataLoader(dst_test, batch_size=256, shuffle=False, num_workers=0)
 
     elif dataset == 'CIFAR100':
         channel = 3
@@ -64,6 +111,7 @@ def get_dataset(dataset, data_path):
         dst_train = datasets.CIFAR100(data_path, train=True, download=True, transform=transform) # no augmentation
         dst_test = datasets.CIFAR100(data_path, train=False, download=True, transform=transform)
         class_names = dst_train.classes
+        testloader = torch.utils.data.DataLoader(dst_test, batch_size=256, shuffle=False, num_workers=0)
 
     elif dataset == 'TinyImageNet':
         channel = 3
@@ -92,13 +140,69 @@ def get_dataset(dataset, data_path):
             images_val[:, c] = (images_val[:, c] - mean[c]) / std[c]
 
         dst_test = TensorDataset(images_val, labels_val)  # no augmentation
+        testloader = torch.utils.data.DataLoader(dst_test, batch_size=256, shuffle=False, num_workers=0)
+
+    #train_source# and train_source_label#
+
+    elif dataset == 'pre_processed_office31':
+        #parent_dir = os.getcwd().parent
+        #path = os.path.join(parent_dir,'Transfer-Learning-Library','examples','domain_adaptation','image_classification','data','pre_cond','office31','train_source1')
+        channel = 3
+        im_size = (224, 224)
+        num_classes = 31
+        transform = None
+        images_val = None
+        labels_val = None
+        testloader = None
+        class_names = None
+        dst_test = None
+     
+        #parent_dir = os.getcwd().parent
+        #source_path = os.path.join(parent_dir,'Transfer-Learning-Library','examples','domain_adaptation','image_classification','data','pre_cond','office31')
+        mean, std = getStatistics(os.path.join(data_path,"imgs"))
+        dst_train = TransformedData(data_path)
+
 
     else:
         exit('unknown dataset: %s'%dataset)
 
-
-    testloader = torch.utils.data.DataLoader(dst_test, batch_size=256, shuffle=False, num_workers=0)
+    
+   #IF data is pre_processed for domain adapt then: testloader and class_names are None
     return channel, im_size, num_classes, class_names, mean, std, dst_train, dst_test, testloader
+
+
+class TransformedData(Dataset):
+  def __init__(self, path):
+    
+    self.imgs_path = os.path.join(path,"imgs")
+    self.labels_path = os.path.join(path,"labels")
+    #print(os.listdir(self.imgs_path))
+    #print("FFFFFFFF")
+    #print(os.listdir(self.labels_path))
+    self.len = len(os.listdir(self.imgs_path)) 
+    self.ls_tensors = sort_filenames_by_number(os.listdir(self.imgs_path))
+    self.ls_labels = sort_filenames_by_number(os.listdir(self.labels_path))
+    
+
+  def __getitem__(self, index):
+
+    img_path = os.path.join(self.imgs_path, self.ls_tensors[index])
+    label_path = os.path.join(self.labels_path, self.ls_labels[index])
+    img = np.load(img_path)
+    label = np.load(label_path)
+    img = torch.from_numpy(img)
+    label = torch.from_numpy(label)
+
+    #Below might depend on if dataset is office31 or some other dataset, might need different way to get source and label tensors
+    #Also print data type for debugging purpose
+   
+    #print(img.type)
+    #print(label.type)
+
+    return img, label
+
+  def __len__(self):
+    return self.len   
 
 
 
@@ -344,6 +448,8 @@ def evaluate_synset(it_eval, net, images_train, labels_train, testloader, args):
     optimizer = torch.optim.SGD(net.parameters(), lr=lr, momentum=0.9, weight_decay=0.0005)
     criterion = nn.CrossEntropyLoss().to(args.device)
 
+    #if args.domain_adaptation == "True":   Maybe have to branch and set dst_train = TransformedDataset()
+        
     dst_train = TensorDataset(images_train, labels_train)
     trainloader = torch.utils.data.DataLoader(dst_train, batch_size=args.batch_train, shuffle=True, num_workers=0)
 
@@ -354,9 +460,11 @@ def evaluate_synset(it_eval, net, images_train, labels_train, testloader, args):
             lr *= 0.1
             optimizer = torch.optim.SGD(net.parameters(), lr=lr, momentum=0.9, weight_decay=0.0005)
 
-    time_train = time.time() - start
-    loss_test, acc_test = epoch('test', testloader, net, optimizer, criterion, args, aug = False)
-    print('%s Evaluate_%02d: epoch = %04d train time = %d s train loss = %.6f train acc = %.4f, test acc = %.4f' % (get_time(), it_eval, Epoch, int(time_train), loss_train, acc_train, acc_test))
+    if args.domain_adaptation =="False":
+
+        time_train = time.time() - start
+        loss_test, acc_test = epoch('test', testloader, net, optimizer, criterion, args, aug = False)
+        print('%s Evaluate_%02d: epoch = %04d train time = %d s train loss = %.6f train acc = %.4f, test acc = %.4f' % (get_time(), it_eval, Epoch, int(time_train), loss_train, acc_train, acc_test))
 
     return net, acc_train, acc_test
 
