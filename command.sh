@@ -1,1 +1,1 @@
-python main.py  --dataset pre_processed_office31 --model ConvNet  --ipc 1 --domain-adaptation True --dsa_strategy None --data_path /home/daniel/exjobb/Transfer-Learning-Library/examples/domain_adaptation/image_classification/data/pre_cond/office31
+python main.py  --dataset pre_processed_office31 --model ResNet18  --ipc 10 --domain-adaptation True --dsa_strategy None --data_path /home/daniel/exjobb/Transfer-Learning-Library/examples/domain_adaptation/image_classification/data/pre_cond/office31

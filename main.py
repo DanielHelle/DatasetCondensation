@@ -23,8 +23,8 @@ def main():
     parser.add_argument('--Iteration', type=int, default=1000, help='training iterations')
     parser.add_argument('--lr_img', type=float, default=0.1, help='learning rate for updating synthetic images')
     parser.add_argument('--lr_net', type=float, default=0.01, help='learning rate for updating network parameters')
-    parser.add_argument('--batch_real', type=int, default=1, help='batch size for real data')#default value batch_real = 256
-    parser.add_argument('--batch_train', type=int, default=1, help='batch size for training networks') #default value batch_train = 256
+    parser.add_argument('--batch_real', type=int, default=256, help='batch size for real data')#default value batch_real = 256
+    parser.add_argument('--batch_train', type=int, default=256, help='batch size for training networks') #default value batch_train = 256
     parser.add_argument('--init', type=str, default='noise', help='noise/real: initialize synthetic images from random noise or randomly sampled real images.')
     parser.add_argument('--dsa_strategy', type=str, default='None', help='differentiable Siamese augmentation strategy')
     parser.add_argument('--data_path', type=str, default='data', help='dataset path')
@@ -81,12 +81,12 @@ def main():
 
         def get_images(c, n): # get random n images from class c
             idx_shuffle = np.random.permutation(indices_class[c])[:n]
-            print("indices_class[c]: {}".format(indices_class[c]))
+            #print("indices_class[c]: {}".format(indices_class[c]))
             
-            print("N: {}".format(n))
+            #print("N: {}".format(n))
             #print("IDX_SHUFFLE")
-            print("length of idx shuffle: {}".format(len(idx_shuffle)))
-            print("images_all[idx_shuffle].size(): {}".format(images_all[idx_shuffle].size()))
+            #print("length of idx shuffle: {}".format(len(idx_shuffle)))
+            #print("images_all[idx_shuffle].size(): {}".format(images_all[idx_shuffle].size()))
             return images_all[idx_shuffle]
 
         for ch in range(channel):
@@ -124,10 +124,14 @@ def main():
                         args.dc_aug_param = None
                         print('DSA augmentation strategy: \n', args.dsa_strategy)
                         print('DSA augmentation parameters: \n', args.dsa_param.__dict__)
-                    else:
-                        if args.domain_adaptation == "False":
+                    
+                    elif args.domain_adaptation == "False":
                             args.dc_aug_param = get_daparam(args.dataset, args.model, model_eval, args.ipc) # This augmentation parameter set is only for DC method. It will be muted when args.dsa is True.
                             print('DC augmentation parameters: \n', args.dc_aug_param)
+                    #strategy is none if domain adaptation is toggled.
+                    else:
+                        args.dc_aug_param = {}
+                        args.dc_aug_param['strategy'] = 'none'
 
                     if args.dsa or args.dc_aug_param['strategy'] != 'none':
                         args.epoch_eval_train = 1000  # Training with data augmentation needs more epochs.
@@ -139,7 +143,10 @@ def main():
                         net_eval = get_network(model_eval, channel, num_classes, im_size).to(args.device) # get a random model
                         image_syn_eval, label_syn_eval = copy.deepcopy(image_syn.detach()), copy.deepcopy(label_syn.detach()) # avoid any unaware modification
                         _, acc_train, acc_test = evaluate_synset(it_eval, net_eval, image_syn_eval, label_syn_eval, testloader, args)
-                        accs.append(acc_test)
+                        if args.domain_adaptation == "False":
+                            accs.append(acc_test)
+                        else:
+                            accs.append(acc_train)
                     print('Evaluate %d random %s, mean = %.4f std = %.4f\n-------------------------'%(len(accs), model_eval, np.mean(accs), np.std(accs)))
 
                     if it == args.Iteration: # record the final results
@@ -154,20 +161,20 @@ def main():
                 image_syn_vis[image_syn_vis>1] = 1.0
                 save_image(image_syn_vis, save_name, nrow=args.ipc) # Trying normalize = True/False may get better visual effects.
                 
-            if args.domain_adaptation == "True":
-
-                print("FIEMFEIMFEIM")
-
-                save_name = os.path.join(args.save_path, 'vis_%s_%s_%s_%dipc_exp%d_iter%d.png'%(args.method, args.dataset, args.model, args.ipc, exp, it))
-                image_syn_vis = copy.deepcopy(image_syn.detach().cpu())
-                for ch in range(channel):
-                    image_syn_vis[:, ch] = image_syn_vis[:, ch]  * std[ch] + mean[ch]
-                image_syn_vis[image_syn_vis<0] = 0.0
-                image_syn_vis[image_syn_vis>1] = 1.0
-                save_image(image_syn_vis, save_name, nrow=args.ipc) # Trying normalize = True/False may get better visual effects.
+          #  if args.domain_adaptation == "True":
+#
+#                 
+#
+#                save_name = os.path.join(args.save_path, 'vis_%s_%s_%s_%dipc_exp%d_iter%d.png'%(args.method, args.dataset, args.model, args.ipc, exp, it))
+#                image_syn_vis = copy.deepcopy(image_syn.detach().cpu())
+#                for ch in range(channel):
+#                    image_syn_vis[:, ch] = image_syn_vis[:, ch]  * std[ch] + mean[ch]
+#                image_syn_vis[image_syn_vis<0] = 0.0
+#                image_syn_vis[image_syn_vis>1] = 1.0
+#                save_image(image_syn_vis, save_name, nrow=args.ipc) # Trying normalize = True/False may get better visual effects.
                 
 
-            print("AAAARGS: {}".format(args.domain_adaptation))
+            #print("ARGS: {}".format(args.domain_adaptation))
             ''' Train synthetic data '''
             net = get_network(args.model, channel, num_classes, im_size).to(args.device) # get a random model
             net.train()
@@ -203,12 +210,12 @@ def main():
                 loss = torch.tensor(0.0).to(args.device)
                 for c in range(num_classes):
                     img_real = get_images(c, args.batch_real)
-                    print("FFFFFF")
+                    #print("FFFFFF")
                     #print(img_real)
-                    print(img_real.size())
-                    print("batch_real == {}".format(args.batch_real))
-                    print("images_all.size() == {}".format(images_all.size()))
-                    print("DDDDDDD")
+                    #print(img_real.size())
+                    #print("batch_real == {}".format(args.batch_real))
+                    #print("images_all.size() == {}".format(images_all.size()))
+                    #print("DDDDDDD")
                     lab_real = torch.ones((img_real.shape[0],), device=args.device, dtype=torch.long) * c
                     img_syn = image_syn[c*args.ipc:(c+1)*args.ipc].reshape((args.ipc, channel, im_size[0], im_size[1]))
                     lab_syn = torch.ones((args.ipc,), device=args.device, dtype=torch.long) * c
@@ -220,8 +227,8 @@ def main():
                     
 
                     output_real = net(img_real)
-                    print("output_real.size(): {}".format(output_real.size()))
-                    print("lab_real: {}".format(lab_real.size()))
+                    #print("output_real.size(): {}".format(output_real.size()))
+                    #print("lab_real: {}".format(lab_real.size()))
                     loss_real = criterion(output_real, lab_real)
                     gw_real = torch.autograd.grad(loss_real, net_parameters)
                     gw_real = list((_.detach().clone() for _ in gw_real))

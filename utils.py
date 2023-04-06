@@ -148,7 +148,7 @@ def get_dataset(dataset, data_path):
         #parent_dir = os.getcwd().parent
         #path = os.path.join(parent_dir,'Transfer-Learning-Library','examples','domain_adaptation','image_classification','data','pre_cond','office31','train_source1')
         channel = 3
-        im_size = (224, 224)
+        im_size = (32, 32)
         num_classes = 31
         transform = None
         images_val = None
@@ -455,7 +455,10 @@ def evaluate_synset(it_eval, net, images_train, labels_train, testloader, args):
 
     start = time.time()
     for ep in range(Epoch+1):
-        loss_train, acc_train = epoch('train', trainloader, net, optimizer, criterion, args, aug = True)
+        if args.domain_adaptation == "False":
+            loss_train, acc_train = epoch('train', trainloader, net, optimizer, criterion, args, aug = True)
+        else:
+            loss_train, acc_train = epoch('train', trainloader, net, optimizer, criterion, args, aug = False)
         if ep in lr_schedule:
             lr *= 0.1
             optimizer = torch.optim.SGD(net.parameters(), lr=lr, momentum=0.9, weight_decay=0.0005)
@@ -465,6 +468,8 @@ def evaluate_synset(it_eval, net, images_train, labels_train, testloader, args):
         time_train = time.time() - start
         loss_test, acc_test = epoch('test', testloader, net, optimizer, criterion, args, aug = False)
         print('%s Evaluate_%02d: epoch = %04d train time = %d s train loss = %.6f train acc = %.4f, test acc = %.4f' % (get_time(), it_eval, Epoch, int(time_train), loss_train, acc_train, acc_test))
+    else:
+        acc_test = -1
 
     return net, acc_train, acc_test
 
