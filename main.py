@@ -82,9 +82,6 @@ def main():
         def get_images(c, n): # get random n images from class c
             idx_shuffle = np.random.permutation(indices_class[c])[:n]
             #print("indices_class[c]: {}".format(indices_class[c]))
-            
-            #print("N: {}".format(n))
-            #print("IDX_SHUFFLE")
             #print("length of idx shuffle: {}".format(len(idx_shuffle)))
             #print("images_all[idx_shuffle].size(): {}".format(images_all[idx_shuffle].size()))
             return images_all[idx_shuffle]
@@ -146,7 +143,7 @@ def main():
                         if args.domain_adaptation == "False":
                             accs.append(acc_test)
                         else:
-                            accs.append(acc_train)
+                            accs.append(acc_test) #Set to acc_train to record train accs only for no test data.
                     print('Evaluate %d random %s, mean = %.4f std = %.4f\n-------------------------'%(len(accs), model_eval, np.mean(accs), np.std(accs)))
 
                     if it == args.Iteration: # record the final results
@@ -160,6 +157,13 @@ def main():
                 image_syn_vis[image_syn_vis<0] = 0.0
                 image_syn_vis[image_syn_vis>1] = 1.0
                 save_image(image_syn_vis, save_name, nrow=args.ipc) # Trying normalize = True/False may get better visual effects.
+                temp_save = []
+
+                if it == 0:
+                    temp_save.append([copy.deepcopy(image_syn.detach().cpu()), copy.deepcopy(label_syn.detach().cpu())])
+                    torch.save({'data': temp_save, 'accs_all_exps': -1, }, os.path.join(args.save_path, 'noise_%s_%s_%s_%dipc.pt'%(args.method, args.dataset, args.model, args.ipc)))
+                    #torch.save(net.state_dict(),os.path.join(args.save_path, 'state_dict_%s_%s_%s_%dipc.pt'%(args.method, args.dataset, args.model, args.ipc)))
+                
                 
           #  if args.domain_adaptation == "True":
 #
@@ -264,6 +268,7 @@ def main():
             if it == args.Iteration: # only record the final results
                 data_save.append([copy.deepcopy(image_syn.detach().cpu()), copy.deepcopy(label_syn.detach().cpu())])
                 torch.save({'data': data_save, 'accs_all_exps': accs_all_exps, }, os.path.join(args.save_path, 'res_%s_%s_%s_%dipc.pt'%(args.method, args.dataset, args.model, args.ipc)))
+                torch.save(net.state_dict(),os.path.join(args.save_path, 'state_dict_%s_%s_%s_%dipc.pt'%(args.method, args.dataset, args.model, args.ipc)))
 
 
     print('\n==================== Final Results ====================\n')

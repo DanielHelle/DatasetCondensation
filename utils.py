@@ -9,6 +9,7 @@ from torchvision import datasets, transforms
 from scipy.ndimage.interpolation import rotate as scipyrotate
 from networks import MLP, ConvNet, LeNet, AlexNet, AlexNetBN, VGG11, VGG11BN, ResNet18, ResNet18BN_AP, ResNet18BN
 import re
+from torch.utils.data import DataLoader, random_split
 
 def extract_number(filepath):
     filename = os.path.basename(filepath)
@@ -161,6 +162,70 @@ def get_dataset(dataset, data_path):
         #source_path = os.path.join(parent_dir,'Transfer-Learning-Library','examples','domain_adaptation','image_classification','data','pre_cond','office31')
         mean, std = getStatistics(os.path.join(data_path,"imgs"))
         dst_train = TransformedData(data_path)
+        total_size = len(dst_train)
+        train_size = int(0.8 * total_size)  # 80% for training
+        test_size = total_size - train_size  # 20% for testing
+        dst_train, test_dataset = random_split(dst_train, [train_size, test_size])
+        testloader = DataLoader(test_dataset, batch_size=256, shuffle=False, num_workers=0)
+
+    elif dataset == 'pre_processed_mnist':
+        channel = 1
+        im_size = (32, 32)
+        num_classes = 10
+        transform = None
+        images_val = None
+        labels_val = None
+        testloader = None
+        class_names = None
+        dst_test = None
+     
+        mean, std = getStatistics(os.path.join(data_path,"imgs"))
+        dst_train = TransformedData(data_path)
+        total_size = len(dst_train)
+        train_size = int(0.8 * total_size)  # 80% for training
+        test_size = total_size - train_size  # 20% for testing
+        dst_train, test_dataset = random_split(dst_train, [train_size, test_size])
+        testloader = DataLoader(test_dataset, batch_size=256, shuffle=False, num_workers=0)
+
+    elif dataset == 'pre_processed_usps':
+        channel = 1
+        im_size = (32, 32)
+        num_classes = 10
+        transform = None
+        images_val = None
+        labels_val = None
+        testloader = None
+        class_names = None
+        dst_test = None
+     
+        mean, std = getStatistics(os.path.join(data_path,"imgs"))
+        dst_train = TransformedData(data_path)
+        total_size = len(dst_train)
+        train_size = int(0.8 * total_size)  # 80% for training
+        test_size = total_size - train_size  # 20% for testing
+        dst_train, test_dataset = random_split(dst_train, [train_size, test_size])
+        testloader = DataLoader(test_dataset, batch_size=256, shuffle=False, num_workers=0)
+
+    elif dataset == 'pre_processed_svhn':
+        channel = 3
+        im_size = (32, 32)
+        num_classes = 10
+        transform = None
+        images_val = None
+        labels_val = None
+        testloader = None
+        class_names = None
+        dst_test = None
+     
+        mean, std = getStatistics(os.path.join(data_path,"imgs"))
+        dst_train = TransformedData(data_path)
+        total_size = len(dst_train)
+        train_size = int(0.8 * total_size)  # 80% for training
+        test_size = total_size - train_size  # 20% for testing
+        dst_train, test_dataset = random_split(dst_train, [train_size, test_size])
+        testloader = DataLoader(test_dataset, batch_size=256, shuffle=False, num_workers=0)
+
+
 
 
     else:
@@ -463,13 +528,12 @@ def evaluate_synset(it_eval, net, images_train, labels_train, testloader, args):
             lr *= 0.1
             optimizer = torch.optim.SGD(net.parameters(), lr=lr, momentum=0.9, weight_decay=0.0005)
 
-    if args.domain_adaptation =="False":
+    
 
-        time_train = time.time() - start
-        loss_test, acc_test = epoch('test', testloader, net, optimizer, criterion, args, aug = False)
-        print('%s Evaluate_%02d: epoch = %04d train time = %d s train loss = %.6f train acc = %.4f, test acc = %.4f' % (get_time(), it_eval, Epoch, int(time_train), loss_train, acc_train, acc_test))
-    else:
-        acc_test = -1
+    time_train = time.time() - start
+    loss_test, acc_test = epoch('test', testloader, net, optimizer, criterion, args, aug = False)
+    print('%s Evaluate_%02d: epoch = %04d train time = %d s train loss = %.6f train acc = %.4f, test acc = %.4f' % (get_time(), it_eval, Epoch, int(time_train), loss_train, acc_train, acc_test))
+    
 
     return net, acc_train, acc_test
 
