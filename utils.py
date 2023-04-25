@@ -9,7 +9,7 @@ from torchvision import datasets, transforms
 from scipy.ndimage.interpolation import rotate as scipyrotate
 from networks import MLP, ConvNet, LeNet, AlexNet, AlexNetBN, VGG11, VGG11BN, ResNet18, ResNet18BN_AP, ResNet18BN
 import re
-from torch.utils.data import DataLoader, random_split
+from torch.utils.data import DataLoader, random_split, Subset
 
 def extract_number(filepath):
     filename = os.path.basename(filepath)
@@ -177,15 +177,27 @@ def get_dataset(dataset, data_path):
         labels_val = None
         testloader = None
         class_names = None
-        dst_test = None
+        
      
         mean, std = getStatistics(os.path.join(data_path,"imgs"))
-        dst_train = TransformedData(data_path)
-        total_size = len(dst_train)
-        train_size = int(0.8 * total_size)  # 80% for training
+        dataset = TransformedData(data_path)
+        total_size = len(dataset)
+        split_ratio = 0.8
+        train_size = int(split_ratio * total_size)  # 80% for training
         test_size = total_size - train_size  # 20% for testing
-        dst_train, test_dataset = random_split(dst_train, [train_size, test_size])
-        testloader = DataLoader(test_dataset, batch_size=256, shuffle=False, num_workers=0)
+
+        train_indices = range(0, train_size)
+        test_indices = range(train_size, total_size)
+
+        dst_train = Subset(dataset, train_indices)
+        dst_test= Subset(dataset, test_indices)
+
+        #dst_train, test_dataset = random_split(dst_train, [train_size, test_size])
+        testloader = DataLoader(dst_test, batch_size=256, shuffle=False, num_workers=0)
+
+
+    
+
 
     elif dataset == 'pre_processed_usps':
         channel = 1
@@ -199,12 +211,20 @@ def get_dataset(dataset, data_path):
         dst_test = None
      
         mean, std = getStatistics(os.path.join(data_path,"imgs"))
-        dst_train = TransformedData(data_path)
-        total_size = len(dst_train)
-        train_size = int(0.8 * total_size)  # 80% for training
+        dataset = TransformedData(data_path)
+        total_size = len(dataset)
+        split_ratio = 0.8
+        train_size = int(split_ratio * total_size)  # 80% for training
         test_size = total_size - train_size  # 20% for testing
-        dst_train, test_dataset = random_split(dst_train, [train_size, test_size])
-        testloader = DataLoader(test_dataset, batch_size=256, shuffle=False, num_workers=0)
+
+        train_indices = range(0, train_size)
+        test_indices = range(train_size, total_size)
+
+        dst_train = Subset(dataset, train_indices)
+        dst_test= Subset(dataset, test_indices)
+
+        #dst_train, test_dataset = random_split(dst_train, [train_size, test_size])
+        testloader = DataLoader(dst_test, batch_size=256, shuffle=False, num_workers=0)
 
     elif dataset == 'pre_processed_svhn':
         channel = 3
@@ -218,12 +238,20 @@ def get_dataset(dataset, data_path):
         dst_test = None
      
         mean, std = getStatistics(os.path.join(data_path,"imgs"))
-        dst_train = TransformedData(data_path)
-        total_size = len(dst_train)
-        train_size = int(0.8 * total_size)  # 80% for training
+        dataset = TransformedData(data_path)
+        total_size = len(dataset)
+        split_ratio = 0.8
+        train_size = int(split_ratio * total_size)  # 80% for training
         test_size = total_size - train_size  # 20% for testing
-        dst_train, test_dataset = random_split(dst_train, [train_size, test_size])
-        testloader = DataLoader(test_dataset, batch_size=256, shuffle=False, num_workers=0)
+
+        train_indices = range(0, train_size)
+        test_indices = range(train_size, total_size)
+
+        dst_train = Subset(dataset, train_indices)
+        dst_test= Subset(dataset, test_indices)
+
+        #dst_train, test_dataset = random_split(dst_train, [train_size, test_size])
+        testloader = DataLoader(dst_test, batch_size=256, shuffle=False, num_workers=0)
 
 
 

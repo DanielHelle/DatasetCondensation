@@ -1,0 +1,164 @@
+eval_it_pool:  [0, 500, 1000]
+Attention: Here I will replace BN with IN in evaluation, as the synthetic set is too small to measure BN hyper-parameters.
+
+================== Exp 0 ==================
+ 
+Hyper-parameters: 
+ {'method': 'DC', 'dataset': 'pre_processed_office31', 'model': 'ResNet18BN', 'ipc': 1, 'eval_mode': 'S', 'num_exp': 1, 'num_eval': 20, 'epoch_eval_train': 300, 'Iteration': 1000, 'lr_img': 0.1, 'lr_net': 0.01, 'batch_real': 256, 'batch_train': 256, 'init': 'noise', 'dsa_strategy': 'None', 'data_path': '/home/daniel/exjobb/Transfer-Learning-Library/examples/domain_adaptation/image_classification/data/pre_cond/office31', 'save_path': 'result', 'dis_metric': 'ours', 'domain_adaptation': 'True', 'outer_loop': 1, 'inner_loop': 1, 'device': 'cuda', 'dsa_param': <utils.ParamDiffAug object at 0x7feae6893e10>, 'dsa': False}
+Evaluation model pool:  ['ResNet18']
+class c = 0: 92 real images
+class c = 1: 82 real images
+class c = 2: 72 real images
+class c = 3: 82 real images
+class c = 4: 36 real images
+class c = 5: 94 real images
+class c = 6: 91 real images
+class c = 7: 97 real images
+class c = 8: 97 real images
+class c = 9: 81 real images
+class c = 10: 99 real images
+class c = 11: 100 real images
+class c = 12: 100 real images
+class c = 13: 98 real images
+class c = 14: 100 real images
+class c = 15: 99 real images
+class c = 16: 100 real images
+class c = 17: 94 real images
+class c = 18: 96 real images
+class c = 19: 95 real images
+class c = 20: 93 real images
+class c = 21: 100 real images
+class c = 22: 98 real images
+class c = 23: 98 real images
+class c = 24: 90 real images
+class c = 25: 75 real images
+class c = 26: 100 real images
+class c = 27: 99 real images
+class c = 28: 99 real images
+class c = 29: 96 real images
+class c = 30: 64 real images
+real images channel 0, mean = 1.3375, std = 1.3229
+real images channel 1, mean = 1.4691, std = 1.3635
+real images channel 2, mean = 1.6760, std = 1.3667
+initialize synthetic data from random noise
+[2023-04-10 01:54:38] training begins
+-------------------------
+Evaluation
+model_train = ResNet18BN, model_eval = ResNet18, iteration = 0
+Evaluate 20 random ResNet18, mean = 1.0000 std = 0.0000
+-------------------------
+[2023-04-10 02:02:02] iter = 0000, loss = 3048.1794
+[2023-04-10 02:11:10] iter = 0010, loss = 2343.4138
+[2023-04-10 02:20:17] iter = 0020, loss = 2245.7891
+[2023-04-10 02:29:23] iter = 0030, loss = 2064.4820
+[2023-04-10 02:38:30] iter = 0040, loss = 1937.8416
+[2023-04-10 02:47:36] iter = 0050, loss = 1884.7792
+[2023-04-10 02:56:43] iter = 0060, loss = 1740.5970
+[2023-04-10 03:05:49] iter = 0070, loss = 1761.1242
+[2023-04-10 03:14:56] iter = 0080, loss = 1585.9260
+[2023-04-10 03:24:03] iter = 0090, loss = 1486.5965
+[2023-04-10 03:33:09] iter = 0100, loss = 1498.7404
+[2023-04-10 03:42:16] iter = 0110, loss = 1398.6290
+[2023-04-10 03:51:22] iter = 0120, loss = 1396.0213
+[2023-04-10 04:00:29] iter = 0130, loss = 1351.8654
+[2023-04-10 04:09:35] iter = 0140, loss = 1483.2965
+[2023-04-10 04:18:42] iter = 0150, loss = 1302.4725
+[2023-04-10 04:27:51] iter = 0160, loss = 1259.6318
+[2023-04-10 04:37:03] iter = 0170, loss = 1271.1278
+[2023-04-10 04:46:14] iter = 0180, loss = 1290.1029
+[2023-04-10 04:55:26] iter = 0190, loss = 1369.6249
+[2023-04-10 05:04:37] iter = 0200, loss = 1333.3535
+[2023-04-10 05:13:49] iter = 0210, loss = 1366.4308
+[2023-04-10 05:23:00] iter = 0220, loss = 1314.2306
+[2023-04-10 05:32:12] iter = 0230, loss = 1324.6084
+[2023-04-10 05:41:24] iter = 0240, loss = 1325.1072
+[2023-04-10 05:50:35] iter = 0250, loss = 1183.6918
+[2023-04-10 05:59:46] iter = 0260, loss = 1410.6414
+[2023-04-10 06:08:58] iter = 0270, loss = 1212.7141
+[2023-04-10 06:18:09] iter = 0280, loss = 1231.8681
+[2023-04-10 06:27:21] iter = 0290, loss = 1277.6968
+[2023-04-10 06:36:32] iter = 0300, loss = 1243.9011
+[2023-04-10 06:45:44] iter = 0310, loss = 1177.4984
+[2023-04-10 06:54:56] iter = 0320, loss = 1214.1205
+[2023-04-10 07:04:08] iter = 0330, loss = 1208.1665
+[2023-04-10 07:13:19] iter = 0340, loss = 1195.0745
+[2023-04-10 07:22:30] iter = 0350, loss = 1407.0392
+[2023-04-10 07:31:42] iter = 0360, loss = 1148.8265
+[2023-04-10 07:40:53] iter = 0370, loss = 1426.8513
+[2023-04-10 07:50:04] iter = 0380, loss = 1240.1889
+[2023-04-10 07:59:16] iter = 0390, loss = 1294.8574
+[2023-04-10 08:08:27] iter = 0400, loss = 1221.2744
+[2023-04-10 08:17:39] iter = 0410, loss = 1254.6361
+[2023-04-10 08:26:50] iter = 0420, loss = 1211.5474
+[2023-04-10 08:36:03] iter = 0430, loss = 1268.8551
+[2023-04-10 08:45:14] iter = 0440, loss = 1302.1472
+[2023-04-10 08:54:26] iter = 0450, loss = 1280.8463
+[2023-04-10 09:03:38] iter = 0460, loss = 1175.3745
+[2023-04-10 09:12:50] iter = 0470, loss = 1233.7526
+[2023-04-10 09:22:04] iter = 0480, loss = 1181.4057
+[2023-04-10 09:31:18] iter = 0490, loss = 1156.2838
+-------------------------
+Evaluation
+model_train = ResNet18BN, model_eval = ResNet18, iteration = 500
+Evaluate 20 random ResNet18, mean = 1.0000 std = 0.0000
+-------------------------
+[2023-04-10 09:47:08] iter = 0500, loss = 1212.7886
+[2023-04-10 09:56:26] iter = 0510, loss = 1223.6681
+[2023-04-10 10:05:41] iter = 0520, loss = 1220.2196
+[2023-04-10 10:14:55] iter = 0530, loss = 1236.8465
+[2023-04-10 10:24:11] iter = 0540, loss = 1246.8455
+[2023-04-10 10:33:25] iter = 0550, loss = 1218.7951
+[2023-04-10 10:42:40] iter = 0560, loss = 1239.2947
+[2023-04-10 10:51:54] iter = 0570, loss = 1241.4124
+[2023-04-10 11:01:29] iter = 0580, loss = 1204.9982
+[2023-04-10 11:14:44] iter = 0590, loss = 1220.6174
+[2023-04-10 11:28:57] iter = 0600, loss = 1230.3332
+[2023-04-10 11:40:35] iter = 0610, loss = 1113.4923
+[2023-04-10 11:51:27] iter = 0620, loss = 1302.7579
+[2023-04-10 12:01:20] iter = 0630, loss = 1370.7074
+[2023-04-10 12:10:39] iter = 0640, loss = 1160.4909
+[2023-04-10 12:19:58] iter = 0650, loss = 1302.8271
+[2023-04-10 12:29:18] iter = 0660, loss = 1178.8411
+[2023-04-10 12:38:37] iter = 0670, loss = 1313.8184
+[2023-04-10 12:48:16] iter = 0680, loss = 1136.2437
+[2023-04-10 12:57:46] iter = 0690, loss = 1159.3734
+[2023-04-10 13:07:16] iter = 0700, loss = 1283.2392
+[2023-04-10 13:18:38] iter = 0710, loss = 1189.0534
+[2023-04-10 13:32:45] iter = 0720, loss = 1067.3271
+[2023-04-10 13:46:45] iter = 0730, loss = 1204.1939
+[2023-04-10 13:57:54] iter = 0740, loss = 1125.6654
+[2023-04-10 14:07:31] iter = 0750, loss = 1260.6234
+[2023-04-10 14:17:23] iter = 0760, loss = 1097.3692
+[2023-04-10 14:34:24] iter = 0770, loss = 1196.7259
+[2023-04-10 14:45:11] iter = 0780, loss = 1141.4292
+[2023-04-10 14:54:33] iter = 0790, loss = 1191.9982
+[2023-04-10 15:03:55] iter = 0800, loss = 1162.0008
+[2023-04-10 15:13:17] iter = 0810, loss = 1193.6259
+[2023-04-10 15:22:38] iter = 0820, loss = 1257.3124
+[2023-04-10 15:31:59] iter = 0830, loss = 1147.5465
+[2023-04-10 15:41:21] iter = 0840, loss = 1244.7427
+[2023-04-10 15:50:42] iter = 0850, loss = 1136.1246
+[2023-04-10 16:00:43] iter = 0860, loss = 1164.9161
+[2023-04-10 16:10:53] iter = 0870, loss = 1095.9173
+[2023-04-10 16:21:31] iter = 0880, loss = 1123.7913
+[2023-04-10 16:35:44] iter = 0890, loss = 1226.5083
+[2023-04-10 16:47:59] iter = 0900, loss = 1252.5290
+[2023-04-10 17:00:22] iter = 0910, loss = 1249.3688
+[2023-04-10 17:10:44] iter = 0920, loss = 1223.8353
+[2023-04-10 17:22:16] iter = 0930, loss = 1193.6624
+[2023-04-10 17:33:27] iter = 0940, loss = 1335.1765
+[2023-04-10 17:42:45] iter = 0950, loss = 1183.3569
+[2023-04-10 17:52:04] iter = 0960, loss = 1125.6637
+[2023-04-10 18:01:58] iter = 0970, loss = 1157.4505
+[2023-04-10 18:11:34] iter = 0980, loss = 1247.5112
+[2023-04-10 18:21:44] iter = 0990, loss = 1185.0840
+-------------------------
+Evaluation
+model_train = ResNet18BN, model_eval = ResNet18, iteration = 1000
+Evaluate 20 random ResNet18, mean = 1.0000 std = 0.0000
+-------------------------
+[2023-04-10 18:38:48] iter = 1000, loss = 1195.4739
+
+==================== Final Results ====================
+
+Run 1 experiments, train on ResNet18BN, evaluate 20 random ResNet18, mean  = 100.00%  std = 0.00%

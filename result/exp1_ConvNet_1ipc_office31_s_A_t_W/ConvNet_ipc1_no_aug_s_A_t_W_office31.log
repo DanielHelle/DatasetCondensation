@@ -1,0 +1,163 @@
+eval_it_pool:  [0, 500, 1000]
+
+================== Exp 0 ==================
+ 
+Hyper-parameters: 
+ {'method': 'DC', 'dataset': 'pre_processed_office31', 'model': 'ConvNet', 'ipc': 1, 'eval_mode': 'S', 'num_exp': 1, 'num_eval': 20, 'epoch_eval_train': 300, 'Iteration': 1000, 'lr_img': 0.1, 'lr_net': 0.01, 'batch_real': 256, 'batch_train': 256, 'init': 'noise', 'dsa_strategy': 'None', 'data_path': '/home/daniel/exjobb/Transfer-Learning-Library/examples/domain_adaptation/image_classification/data/pre_cond/office31', 'save_path': 'result', 'dis_metric': 'ours', 'domain_adaptation': 'True', 'outer_loop': 1, 'inner_loop': 1, 'device': 'cuda', 'dsa_param': <utils.ParamDiffAug object at 0x7fa0703ee350>, 'dsa': False}
+Evaluation model pool:  ['ConvNet']
+class c = 0: 92 real images
+class c = 1: 82 real images
+class c = 2: 72 real images
+class c = 3: 82 real images
+class c = 4: 36 real images
+class c = 5: 94 real images
+class c = 6: 91 real images
+class c = 7: 97 real images
+class c = 8: 97 real images
+class c = 9: 81 real images
+class c = 10: 99 real images
+class c = 11: 100 real images
+class c = 12: 100 real images
+class c = 13: 98 real images
+class c = 14: 100 real images
+class c = 15: 99 real images
+class c = 16: 100 real images
+class c = 17: 94 real images
+class c = 18: 96 real images
+class c = 19: 95 real images
+class c = 20: 93 real images
+class c = 21: 100 real images
+class c = 22: 98 real images
+class c = 23: 98 real images
+class c = 24: 90 real images
+class c = 25: 75 real images
+class c = 26: 100 real images
+class c = 27: 99 real images
+class c = 28: 99 real images
+class c = 29: 96 real images
+class c = 30: 64 real images
+real images channel 0, mean = 1.3375, std = 1.3229
+real images channel 1, mean = 1.4691, std = 1.3635
+real images channel 2, mean = 1.6760, std = 1.3667
+initialize synthetic data from random noise
+[2023-04-10 18:59:49] training begins
+-------------------------
+Evaluation
+model_train = ConvNet, model_eval = ConvNet, iteration = 0
+Evaluate 20 random ConvNet, mean = 1.0000 std = 0.0000
+-------------------------
+[2023-04-10 19:00:51] iter = 0000, loss = 353.9099
+[2023-04-10 19:01:03] iter = 0010, loss = 253.7818
+[2023-04-10 19:01:15] iter = 0020, loss = 221.3477
+[2023-04-10 19:01:26] iter = 0030, loss = 211.0468
+[2023-04-10 19:01:38] iter = 0040, loss = 200.0646
+[2023-04-10 19:01:50] iter = 0050, loss = 182.5865
+[2023-04-10 19:02:02] iter = 0060, loss = 179.8480
+[2023-04-10 19:02:14] iter = 0070, loss = 175.7422
+[2023-04-10 19:02:26] iter = 0080, loss = 163.7503
+[2023-04-10 19:02:38] iter = 0090, loss = 160.2601
+[2023-04-10 19:02:49] iter = 0100, loss = 160.0275
+[2023-04-10 19:03:01] iter = 0110, loss = 154.0032
+[2023-04-10 19:03:13] iter = 0120, loss = 154.9078
+[2023-04-10 19:03:25] iter = 0130, loss = 150.7123
+[2023-04-10 19:03:37] iter = 0140, loss = 152.6904
+[2023-04-10 19:03:49] iter = 0150, loss = 142.9584
+[2023-04-10 19:04:01] iter = 0160, loss = 145.3058
+[2023-04-10 19:04:13] iter = 0170, loss = 138.0409
+[2023-04-10 19:04:25] iter = 0180, loss = 141.8865
+[2023-04-10 19:04:37] iter = 0190, loss = 135.6187
+[2023-04-10 19:04:49] iter = 0200, loss = 136.2270
+[2023-04-10 19:05:01] iter = 0210, loss = 133.5651
+[2023-04-10 19:05:13] iter = 0220, loss = 133.1359
+[2023-04-10 19:05:26] iter = 0230, loss = 135.7081
+[2023-04-10 19:05:38] iter = 0240, loss = 132.1980
+[2023-04-10 19:05:50] iter = 0250, loss = 129.2834
+[2023-04-10 19:06:02] iter = 0260, loss = 132.0759
+[2023-04-10 19:06:14] iter = 0270, loss = 124.8242
+[2023-04-10 19:06:26] iter = 0280, loss = 125.6867
+[2023-04-10 19:06:38] iter = 0290, loss = 126.2688
+[2023-04-10 19:06:50] iter = 0300, loss = 123.3478
+[2023-04-10 19:07:02] iter = 0310, loss = 129.7210
+[2023-04-10 19:07:14] iter = 0320, loss = 126.7271
+[2023-04-10 19:07:27] iter = 0330, loss = 128.2772
+[2023-04-10 19:07:40] iter = 0340, loss = 125.0808
+[2023-04-10 19:07:53] iter = 0350, loss = 127.1237
+[2023-04-10 19:08:06] iter = 0360, loss = 124.2056
+[2023-04-10 19:08:18] iter = 0370, loss = 126.0185
+[2023-04-10 19:08:31] iter = 0380, loss = 123.4641
+[2023-04-10 19:08:43] iter = 0390, loss = 122.5628
+[2023-04-10 19:08:55] iter = 0400, loss = 128.5758
+[2023-04-10 19:09:07] iter = 0410, loss = 123.6294
+[2023-04-10 19:09:19] iter = 0420, loss = 123.0540
+[2023-04-10 19:09:32] iter = 0430, loss = 129.7653
+[2023-04-10 19:09:44] iter = 0440, loss = 121.5620
+[2023-04-10 19:09:56] iter = 0450, loss = 120.0848
+[2023-04-10 19:10:08] iter = 0460, loss = 124.3634
+[2023-04-10 19:10:20] iter = 0470, loss = 121.5004
+[2023-04-10 19:10:32] iter = 0480, loss = 121.9015
+[2023-04-10 19:10:44] iter = 0490, loss = 118.9079
+-------------------------
+Evaluation
+model_train = ConvNet, model_eval = ConvNet, iteration = 500
+Evaluate 20 random ConvNet, mean = 1.0000 std = 0.0000
+-------------------------
+[2023-04-10 19:11:57] iter = 0500, loss = 120.6143
+[2023-04-10 19:12:09] iter = 0510, loss = 118.1714
+[2023-04-10 19:12:21] iter = 0520, loss = 119.5681
+[2023-04-10 19:12:33] iter = 0530, loss = 122.0439
+[2023-04-10 19:12:46] iter = 0540, loss = 121.3556
+[2023-04-10 19:12:58] iter = 0550, loss = 120.8372
+[2023-04-10 19:13:10] iter = 0560, loss = 123.4188
+[2023-04-10 19:13:22] iter = 0570, loss = 115.7346
+[2023-04-10 19:13:35] iter = 0580, loss = 125.6203
+[2023-04-10 19:13:47] iter = 0590, loss = 120.7215
+[2023-04-10 19:13:59] iter = 0600, loss = 120.2578
+[2023-04-10 19:14:11] iter = 0610, loss = 116.9740
+[2023-04-10 19:14:23] iter = 0620, loss = 122.2572
+[2023-04-10 19:14:35] iter = 0630, loss = 121.2627
+[2023-04-10 19:14:48] iter = 0640, loss = 124.3876
+[2023-04-10 19:15:00] iter = 0650, loss = 116.5102
+[2023-04-10 19:15:12] iter = 0660, loss = 118.6050
+[2023-04-10 19:15:25] iter = 0670, loss = 122.2941
+[2023-04-10 19:15:37] iter = 0680, loss = 118.8435
+[2023-04-10 19:15:49] iter = 0690, loss = 119.1927
+[2023-04-10 19:16:02] iter = 0700, loss = 115.3773
+[2023-04-10 19:16:14] iter = 0710, loss = 118.7603
+[2023-04-10 19:16:26] iter = 0720, loss = 117.7221
+[2023-04-10 19:16:38] iter = 0730, loss = 118.6045
+[2023-04-10 19:16:50] iter = 0740, loss = 120.8113
+[2023-04-10 19:17:02] iter = 0750, loss = 114.9528
+[2023-04-10 19:17:14] iter = 0760, loss = 118.3067
+[2023-04-10 19:17:27] iter = 0770, loss = 115.6745
+[2023-04-10 19:17:39] iter = 0780, loss = 114.0654
+[2023-04-10 19:17:51] iter = 0790, loss = 115.7847
+[2023-04-10 19:18:03] iter = 0800, loss = 117.5575
+[2023-04-10 19:18:15] iter = 0810, loss = 117.5975
+[2023-04-10 19:18:27] iter = 0820, loss = 122.4998
+[2023-04-10 19:18:40] iter = 0830, loss = 116.7630
+[2023-04-10 19:18:52] iter = 0840, loss = 116.2212
+[2023-04-10 19:19:04] iter = 0850, loss = 115.0544
+[2023-04-10 19:19:16] iter = 0860, loss = 117.4259
+[2023-04-10 19:19:28] iter = 0870, loss = 118.7575
+[2023-04-10 19:19:40] iter = 0880, loss = 117.4993
+[2023-04-10 19:19:53] iter = 0890, loss = 116.1921
+[2023-04-10 19:20:05] iter = 0900, loss = 113.7386
+[2023-04-10 19:20:17] iter = 0910, loss = 112.7618
+[2023-04-10 19:20:29] iter = 0920, loss = 115.8846
+[2023-04-10 19:20:41] iter = 0930, loss = 115.0401
+[2023-04-10 19:20:53] iter = 0940, loss = 116.9872
+[2023-04-10 19:21:05] iter = 0950, loss = 113.8883
+[2023-04-10 19:21:17] iter = 0960, loss = 110.1281
+[2023-04-10 19:21:29] iter = 0970, loss = 116.2377
+[2023-04-10 19:21:41] iter = 0980, loss = 112.8415
+[2023-04-10 19:21:53] iter = 0990, loss = 118.1479
+-------------------------
+Evaluation
+model_train = ConvNet, model_eval = ConvNet, iteration = 1000
+Evaluate 20 random ConvNet, mean = 1.0000 std = 0.0000
+-------------------------
+[2023-04-10 19:23:05] iter = 1000, loss = 115.4419
+
+==================== Final Results ====================
+
+Run 1 experiments, train on ConvNet, evaluate 20 random ConvNet, mean  = 100.00%  std = 0.00%

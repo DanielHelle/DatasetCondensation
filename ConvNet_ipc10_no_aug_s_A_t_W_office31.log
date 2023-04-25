@@ -1,0 +1,77 @@
+Script started on 2023-04-14 18:47:27+02:00 [TERM="xterm-256color" TTY="/dev/pts/6" COLUMNS="234" LINES="21"]
+(base) ]0;daniel@DESKTOP-JF1TBKP: ~/exjobb/DatasetCondensation[01;32mdaniel@DESKTOP-JF1TBKP[00m:[01;34m~/exjobb/DatasetCondensation[00m$ source command.sh [K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Kconda activate condensation
+(condensation) ]0;daniel@DESKTOP-JF1TBKP: ~/exjobb/DatasetCondensation[01;32mdaniel@DESKTOP-JF1TBKP[00m:[01;34m~/exjobb/DatasetCondensation[00m$ source command.sh 
+eval_it_pool:  [0, 500, 1000]
+
+================== Exp 0 ==================
+ 
+Hyper-parameters: 
+ {'method': 'DC', 'dataset': 'pre_processed_office31', 'model': 'ConvNet', 'ipc': 10, 'eval_mode': 'S', 'num_exp': 1, 'num_eval': 20, 'epoch_eval_train': 300, 'Iteration': 1000, 'lr_img': 0.1, 'lr_net': 0.01, 'batch_real': 256, 'batch_train': 256, 'init': 'noise', 'dsa_strategy': 'None', 'data_path': '/home/daniel/exjobb/Transfer-Learning-Library/examples/domain_adaptation/image_classification/data/pre_cond/office31', 'save_path': 'result', 'dis_metric': 'ours', 'domain_adaptation': 'True', 'outer_loop': 10, 'inner_loop': 50, 'device': 'cuda', 'dsa_param': <utils.ParamDiffAug object at 0x7fdb33cce690>, 'dsa': False}
+Evaluation model pool:  ['ConvNet']
+class c = 0: 92 real images
+class c = 1: 82 real images
+class c = 2: 72 real images
+class c = 3: 82 real images
+class c = 4: 36 real images
+class c = 5: 94 real images
+class c = 6: 91 real images
+class c = 7: 97 real images
+class c = 8: 97 real images
+class c = 9: 81 real images
+class c = 10: 99 real images
+class c = 11: 100 real images
+class c = 12: 100 real images
+class c = 13: 98 real images
+class c = 14: 100 real images
+class c = 15: 99 real images
+class c = 16: 100 real images
+class c = 17: 94 real images
+class c = 18: 96 real images
+class c = 19: 95 real images
+class c = 20: 93 real images
+class c = 21: 100 real images
+class c = 22: 98 real images
+class c = 23: 98 real images
+class c = 24: 90 real images
+class c = 25: 75 real images
+class c = 26: 100 real images
+class c = 27: 99 real images
+class c = 28: 99 real images
+class c = 29: 96 real images
+class c = 30: 64 real images
+real images channel 0, mean = 1.3375, std = 1.3229
+real images channel 1, mean = 1.4691, std = 1.3635
+real images channel 2, mean = 1.6760, std = 1.3667
+initialize synthetic data from random noise
+[2023-04-14 18:48:15] training begins
+-------------------------
+Evaluation
+model_train = ConvNet, model_eval = ConvNet, iteration = 0
+Evaluate 20 random ConvNet, mean = 1.0000 std = 0.0000
+-------------------------
+[2023-04-14 18:56:49] iter = 0000, loss = 277.0522
+[2023-04-14 19:04:35] iter = 0010, loss = 158.4243
+[2023-04-14 19:12:23] iter = 0020, loss = 147.3055
+[2023-04-14 19:20:16] iter = 0030, loss = 134.2291
+[2023-04-14 19:28:09] iter = 0040, loss = 129.7794
+[2023-04-14 19:36:02] iter = 0050, loss = 126.7831
+[2023-04-14 19:44:09] iter = 0060, loss = 115.2339
+[2023-04-14 19:52:51] iter = 0070, loss = 116.6025
+[2023-04-14 20:01:09] iter = 0080, loss = 110.7245
+[2023-04-14 20:09:29] iter = 0090, loss = 106.3160
+[2023-04-14 20:18:19] iter = 0100, loss = 97.7774
+[2023-04-14 20:26:33] iter = 0110, loss = 98.2190
+[2023-04-14 20:34:47] iter = 0120, loss = 93.9745
+[2023-04-14 20:42:59] iter = 0130, loss = 89.4808
+[2023-04-14 20:51:08] iter = 0140, loss = 88.7653
+^CTraceback (most recent call last):
+  File "main.py", line 275, in <module>
+    main()
+  File "main.py", line 240, in main
+    loss.backward()
+  File "/home/daniel/miniconda3/envs/condensation/lib/python3.7/site-packages/torch/tensor.py", line 118, in backward
+    torch.autograd.backward(self, gradient, retain_graph, create_graph)
+  File "/home/daniel/miniconda3/envs/condensation/lib/python3.7/site-packages/torch/autograd/__init__.py", line 93, in backward
+    allow_unreachable=True)  # allow_unreachable flag
+KeyboardInterrupt
+(condensation) ]0;daniel@DESKTOP-JF1TBKP: ~/exjobb/DatasetCondensation[01;32mdaniel@DESKTOP-JF1TBKP[00m:[01;34m~/exjob
