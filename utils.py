@@ -53,7 +53,7 @@ def calculate_mean_std(tensors):
     
 
 
-def get_dataset(dataset, data_path):
+def get_dataset(dataset, data_path,args):
     if dataset == 'MNIST':
         channel = 1
         im_size = (28, 28)
@@ -177,20 +177,20 @@ def get_dataset(dataset, data_path):
         labels_val = None
         testloader = None
         class_names = None
-        
+       
      
         mean, std = getStatistics(os.path.join(data_path,"imgs"))
-        dataset = TransformedData(data_path)
-        total_size = len(dataset)
+        dst_dataset = TransformedData(data_path)
+        total_size = len(dst_dataset)
+        #print("total_size: {}".format(total_size))
         split_ratio = 0.8
         train_size = int(split_ratio * total_size)  # 80% for training
         test_size = total_size - train_size  # 20% for testing
 
-        train_indices = range(0, train_size)
-        test_indices = range(train_size, total_size)
-
-        dst_train = Subset(dataset, train_indices)
-        dst_test= Subset(dataset, test_indices)
+        seed_value = args.partition_seed
+        torch.manual_seed(seed_value)
+        # Split the dataset into train and test sets
+        dst_train, dst_test = random_split(dst_dataset, [train_size, test_size])
 
         #dst_train, test_dataset = random_split(dst_train, [train_size, test_size])
         testloader = DataLoader(dst_test, batch_size=256, shuffle=False, num_workers=0)
@@ -198,7 +198,7 @@ def get_dataset(dataset, data_path):
 
     
 
-
+    #Change from deterministic partition to random split
     elif dataset == 'pre_processed_usps':
         channel = 1
         im_size = (32, 32)
@@ -208,11 +208,11 @@ def get_dataset(dataset, data_path):
         labels_val = None
         testloader = None
         class_names = None
-        dst_test = None
+        
      
         mean, std = getStatistics(os.path.join(data_path,"imgs"))
-        dataset = TransformedData(data_path)
-        total_size = len(dataset)
+        dst_dataset = TransformedData(data_path)
+        total_size = len(dst_dataset)
         split_ratio = 0.8
         train_size = int(split_ratio * total_size)  # 80% for training
         test_size = total_size - train_size  # 20% for testing
@@ -220,8 +220,8 @@ def get_dataset(dataset, data_path):
         train_indices = range(0, train_size)
         test_indices = range(train_size, total_size)
 
-        dst_train = Subset(dataset, train_indices)
-        dst_test= Subset(dataset, test_indices)
+        dst_train = Subset(dst_dataset, train_indices)
+        dst_test= Subset(dst_dataset, test_indices)
 
         #dst_train, test_dataset = random_split(dst_train, [train_size, test_size])
         testloader = DataLoader(dst_test, batch_size=256, shuffle=False, num_workers=0)
@@ -235,20 +235,20 @@ def get_dataset(dataset, data_path):
         labels_val = None
         testloader = None
         class_names = None
-        dst_test = None
+       
      
         mean, std = getStatistics(os.path.join(data_path,"imgs"))
-        dataset = TransformedData(data_path)
-        total_size = len(dataset)
+        dst_dataset = TransformedData(data_path)
+        total_size = len(dst_dataset)
+        #print("total_size: {}".format(total_size))
         split_ratio = 0.8
         train_size = int(split_ratio * total_size)  # 80% for training
         test_size = total_size - train_size  # 20% for testing
 
-        train_indices = range(0, train_size)
-        test_indices = range(train_size, total_size)
-
-        dst_train = Subset(dataset, train_indices)
-        dst_test= Subset(dataset, test_indices)
+        seed_value = args.partition_seed
+        torch.manual_seed(seed_value)
+        # Split the dataset into train and test sets
+        dst_train, dst_test = random_split(dst_dataset, [train_size, test_size])
 
         #dst_train, test_dataset = random_split(dst_train, [train_size, test_size])
         testloader = DataLoader(dst_test, batch_size=256, shuffle=False, num_workers=0)
@@ -269,9 +269,7 @@ class TransformedData(Dataset):
     
     self.imgs_path = os.path.join(path,"imgs")
     self.labels_path = os.path.join(path,"labels")
-    #print(os.listdir(self.imgs_path))
-    #print("FFFFFFFF")
-    #print(os.listdir(self.labels_path))
+ 
     self.len = len(os.listdir(self.imgs_path)) 
     self.ls_tensors = sort_filenames_by_number(os.listdir(self.imgs_path))
     self.ls_labels = sort_filenames_by_number(os.listdir(self.labels_path))

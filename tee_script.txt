@@ -9,4 +9,13 @@
 ./command.sh 2>&1 | tee -a ConvNet_ipc1_no_aug_s_MNIST_t_USPS_80train_20test_norand.log
 
 
+./command.sh 2>&1 | tee -a ConvNet_ipc1_no_aug_s_USPS_80train_20test_norand.log
+
+./command.sh 2>&1 | tee -a ConvNet_ipc10_no_aug_s_SVHN_80train_20test_norand.log
+
+
+./command.sh 2>&1 | tee -a ConvNet_ipc1_no_aug_s_MNIST_80train_20test_norand.log
+
+
+
 

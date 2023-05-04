@@ -30,7 +30,9 @@ def main():
     parser.add_argument('--data_path', type=str, default='data', help='dataset path')
     parser.add_argument('--save_path', type=str, default='result', help='path to save results')
     parser.add_argument('--dis_metric', type=str, default='ours', help='distance metric')
-    parser.add_argument("--domain-adaptation",type=str, default= "False",choices=["True","False"], help="Toggle domain adaptation. Set to True if you want to condense pretransformed data for domain adaptation.")
+    parser.add_argument("--domain_adaptation",type=str, default= "False",choices=["True","False"], help="Toggle domain adaptation. Set to True if you want to condense pretransformed data for domain adaptation.")
+    parser.add_argument("--only_save_init",type=str, default= "False",choices=["True","False"], help="Toggle to only save random init")
+    parser.add_argument('--partition_seed', type=int, default=0, help='set seed for partitioning')
 
     args = parser.parse_args()
     args.outer_loop, args.inner_loop = get_loops(args.ipc)
@@ -48,7 +50,7 @@ def main():
     print('eval_it_pool: ', eval_it_pool)
 
     #class_names, dst_test and testloader are None
-    channel, im_size, num_classes, class_names, mean, std, dst_train, dst_test, testloader = get_dataset(args.dataset, args.data_path)
+    channel, im_size, num_classes, class_names, mean, std, dst_train, dst_test, testloader = get_dataset(args.dataset, args.data_path,args)
     model_eval_pool = get_eval_pool(args.eval_mode, args.model, args.model)
 
 
@@ -71,10 +73,14 @@ def main():
 
         images_all = [torch.unsqueeze(dst_train[i][0], dim=0) for i in range(len(dst_train))]
         labels_all = [dst_train[i][1] for i in range(len(dst_train))]
+        
+
+
         for i, lab in enumerate(labels_all):
             indices_class[lab].append(i)
         images_all = torch.cat(images_all, dim=0).to(args.device)
         labels_all = torch.tensor(labels_all, dtype=torch.long, device=args.device)
+            
 
         for c in range(num_classes):
             print('class c = %d: %d real images'%(c, len(indices_class[c])))
@@ -85,7 +91,8 @@ def main():
             #print("length of idx shuffle: {}".format(len(idx_shuffle)))
             #print("images_all[idx_shuffle].size(): {}".format(images_all[idx_shuffle].size()))
             return images_all[idx_shuffle]
-
+        
+            
         for ch in range(channel):
             print('real images channel %d, mean = %.4f, std = %.4f'%(ch, torch.mean(images_all[:, ch]), torch.std(images_all[:, ch])))
 
@@ -98,8 +105,18 @@ def main():
             print('initialize synthetic data from random real images')
             for c in range(num_classes):
                 image_syn.data[c*args.ipc:(c+1)*args.ipc] = get_images(c, args.ipc).detach().data
+            if args.only_save_init == "True":
+
+                real_init_temp = []
+                real_init_temp.append([copy.deepcopy(image_syn.detach().cpu()), copy.deepcopy(label_syn.detach().cpu())])
+                torch.save({'data': real_init_temp, 'accs_all_exps': -1, }, os.path.join(args.save_path, 'real_init_%s_%s_%s_%dipc.pt'%(args.method, args.dataset, args.model, args.ipc)))
+                quit()
+            
+                
         else:
             print('initialize synthetic data from random noise')
+
+        
 
 
         ''' training '''
@@ -178,7 +195,7 @@ def main():
 #                save_image(image_syn_vis, save_name, nrow=args.ipc) # Trying normalize = True/False may get better visual effects.
                 
 
-            #print("ARGS: {}".format(args.domain_adaptation))
+            
             ''' Train synthetic data '''
             net = get_network(args.model, channel, num_classes, im_size).to(args.device) # get a random model
             net.train()
@@ -214,12 +231,12 @@ def main():
                 loss = torch.tensor(0.0).to(args.device)
                 for c in range(num_classes):
                     img_real = get_images(c, args.batch_real)
-                    #print("FFFFFF")
+                   
                     #print(img_real)
                     #print(img_real.size())
                     #print("batch_real == {}".format(args.batch_real))
                     #print("images_all.size() == {}".format(images_all.size()))
-                    #print("DDDDDDD")
+                 
                     lab_real = torch.ones((img_real.shape[0],), device=args.device, dtype=torch.long) * c
                     img_syn = image_syn[c*args.ipc:(c+1)*args.ipc].reshape((args.ipc, channel, im_size[0], im_size[1]))
                     lab_syn = torch.ones((args.ipc,), device=args.device, dtype=torch.long) * c
@@ -229,7 +246,8 @@ def main():
                         img_real = DiffAugment(img_real, args.dsa_strategy, seed=seed, param=args.dsa_param)
                         img_syn = DiffAugment(img_syn, args.dsa_strategy, seed=seed, param=args.dsa_param)
                     
-
+                    
+                    #print(img_real.size())
                     output_real = net(img_real)
                     #print("output_real.size(): {}".format(output_real.size()))
                     #print("lab_real: {}".format(lab_real.size()))
